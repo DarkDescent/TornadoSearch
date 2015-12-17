@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+{% include 'header.html' %}
+<body>
+    <div id = "search_bar">
+        <form action="/search" name="search_form" method="post" id="search_form">
+            <div id = "search_params">
+                <input class="text_search" type="text" placeholder="Введите поисковую строку" name="text" autofocus>
+                <input class="date_search_from" type="text" name="date_from" placeholder="дд.мм.гггг">
+                <input class="date_search_to" type="text" name="date_to" placeholder="дд.мм.гггг">
+            </div>
+            <button class="btn" type="submit">Поиск</button>
+        </form>
+    </div>
+    {% if isSearched %}
+        <div class="results_field">
+            {% for result in results %}
+                <div class="result_field">
+                    <i>{{ result['timestamp'] }}</i><br>
+                    {{ result['text'] }}
+                </div>
+            {%end %}
+        </div>
+    {% end %}
+</body>
+</html>

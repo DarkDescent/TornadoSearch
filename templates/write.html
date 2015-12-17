@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+{% include 'header.html' %}
+<body>
+    <div id = "new_bar">
+        {% if 'message' in globals() %}
+        <div id="result_message">{{ message }}</div>
+        {% end %}
+        <form action="/file" name="new_form" method="post" id="new_form">
+            <div id = "new_params">
+                <input class="text_field" type="text" placeholder="Введите текст" name="text" autofocus>
+                <input class="date_field" type="text" name="date" placeholder="дд.мм.гггг">
+            </div>
+            <button class="btn" type="submit">Сохранить</button>
+        </form>
+    </div>
+</body>
+</html>
