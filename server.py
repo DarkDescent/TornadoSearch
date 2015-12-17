@@ -7,7 +7,9 @@ import tornado.httpserver
 import tornado.gen
 from tornado_elasticsearch import AsyncElasticsearch
 
+#указываем индекс, в котором будут храниться данные (нужен для Elasticsearch)
 currentIndex = "temp"
+#создаем объект асинхронного класса Elasticsearch
 elas = AsyncElasticsearch()
 
 
@@ -46,14 +48,14 @@ class SearchHandler(tornado.web.RequestHandler):
     def post(self):
         searchResults = []
         result_message = u""
-        if(self.get_argument("date_from") == '' and self.get_argument("date_to") == ''):
+        if(self.get_argument("date_from") == '' and self.get_argument("date_to") == ''):        #если мы не указали даты, то выводим весь текст
             filesInfo = yield elas.search(index=currentIndex, body={"query": {"match": {"text": self.get_argument("text")}}})
             result_message = u"Получили следующие результаты:"
-        elif (self.get_argument("date_from") == '' or self.get_argument("date_to") == ''):
+        elif (self.get_argument("date_from") == '' or self.get_argument("date_to") == ''):      #если хотя бы одна из дат не указана, то выводим сообщение о ошибке
             result_message = u"Для фильтрации дат необходимо внести обе даты"
             self.render('templates/search.html', isSearched=0, message=result_message)
             return
-        else:
+        else:                                                                                   #если есть все данные, то выполняем поиск и по словам, и по датам.
             filesInfo = yield elas.search(index=currentIndex, body={"query": {
                 "filtered": {
                     "query": {"match": {"text": {
@@ -70,7 +72,7 @@ class SearchHandler(tornado.web.RequestHandler):
                 }
             }
             })
-        for hit in filesInfo['hits']['hits']:
+        for hit in filesInfo['hits']['hits']:                                                   #после получения всей информации записываем ее для отправки на страницу поиска
             searchResults.append(hit["_source"])
         result_message = u"Получили следующие результаты:"
         self.render('templates/search.html', results=searchResults, isSearched=1, message=result_message)
