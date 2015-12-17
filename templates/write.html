@@ -8,7 +8,7 @@
         {% end %}
         <form action="/file" name="new_form" method="post" id="new_form">
             <div id = "new_params">
-                <input class="text_field" type="text" placeholder="Введите текст" name="text" autofocus>
+                <textarea class="text_field" placeholder="Введите текст" name="text" cols = 100 rows = 20 autofocus></textarea>
                 <input class="date_field" type="text" name="date" placeholder="дд.мм.гггг">
             </div>
             <button class="btn" type="submit">Сохранить</button>
